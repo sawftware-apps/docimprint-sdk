@@ -1,0 +1,23 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.docimprint/api",
+  "description": "AI document intelligence: extract, summarize, claim-check, and notarize with on-chain proofs.",
+  "version": "1.0.0",
+  "repository": {
+    "url": "https://github.com/sawftware-labs/docimprint",
+    "source": "github"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://api.docimprint.com/mcp",
+      "headers": [
+        {
+          "key": "Authorization",
+          "value": "Bearer ${DOCIMPRINT_API_KEY}",
+          "description": "Your DocImprint API key (dr_live_...)"
+        }
+      ]
+    }
+  ]
+}

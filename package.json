@@ -1,0 +1,39 @@
+{
+  "name": "docimprint",
+  "version": "0.1.2",
+  "description": "Official TypeScript SDK for the DocImprint document intelligence API",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.4.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sawftware-labs/docimprint"
+  },
+  "keywords": [
+    "docimprint",
+    "document-intelligence",
+    "evidence-bundle",
+    "x402",
+    "mcp",
+    "ai-agents",
+    "usdc",
+    "base"
+  ]
+}
