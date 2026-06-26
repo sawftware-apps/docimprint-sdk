@@ -195,6 +195,12 @@ Transport: `streamable-http` · Auth: Bearer token (your API key)
 
 ---
 
+## Community
+
+Questions, integrations, and announcements: [GitHub Discussions](https://github.com/sawftware-apps/docimprint-sdk/discussions).
+
+---
+
 ## Links
 
 - [Documentation](https://docimprint.com/docs)
