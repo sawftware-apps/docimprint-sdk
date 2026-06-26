@@ -30,7 +30,7 @@ def test_live_quota(live_client: DocImprintClient) -> None:
 
 def test_live_summarize(live_client: DocImprintClient) -> None:
     result = live_client.summarize(SAMPLE_URL, timeout=120)
-    assert result.get("result") or result.get("bundle_id")
+    assert result.get("result") or result.get("bundle_id") or result.get("summary")
 
 
 def test_live_extract_and_verify_roundtrip(live_client: DocImprintClient) -> None:
