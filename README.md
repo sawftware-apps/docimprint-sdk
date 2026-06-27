@@ -40,6 +40,15 @@ DocImprint turns any PDF or URL into a **tamper-evident evidence bundle** — st
 npm install docimprint
 ```
 
+### Python + CrewAI
+
+```bash
+pip install docimprint           # REST client
+pip install "docimprint[crewai]"  # + CrewAI tools & toolkit
+```
+
+Source lives in [`python/`](python/) in this repo. PyPI: [docimprint](https://pypi.org/project/docimprint/).
+
 ---
 
 ## Quick start
@@ -192,6 +201,12 @@ https://api.docimprint.com/mcp
 ```
 
 Transport: `streamable-http` · Auth: Bearer token (your API key)
+
+---
+
+## Community
+
+Questions, integrations, and announcements: [GitHub Discussions](https://github.com/sawftware-apps/docimprint-sdk/discussions).
 
 ---
 
