@@ -387,12 +387,59 @@ try {
 
 ## Authentication
 
-**API key** — monthly credits via Stripe:
+### API key
+
+Monthly credits via Stripe — sign up at [docimprint.com](https://docimprint.com), free tier available:
+
 ```typescript
 const client = new DocImprintClient({ apiKey: 'dr_live_...' })
 ```
 
-**x402 USDC** — pay per call, no account required. Use the raw API directly with the `X-Payment` header. See [x402 docs](https://docimprint.com/x402).
+### x402 USDC payments
+
+Pay per call in USDC on Base mainnet — **no account, no sign-up, no API key required**. Any EVM wallet can call the API directly.
+
+**How it works:** DocImprint implements the [x402 open standard](https://x402.org). The API returns a `402 Payment Required` response with payment details; your client pays automatically and retries with the `X-Payment` header.
+
+**Prices per call (USDC on Base):**
+
+| Operation | Price |
+|-----------|------:|
+| Extract (full bundle) | $0.075 |
+| Summarize | $0.018 |
+| Q&A | $0.022 |
+| Translate | $0.040 |
+| Claim-check | $0.025 |
+| Describe | $0.018 |
+| Lean extract (no bundle) | $0.010 |
+| Collection search | $0.030 |
+| Collection ask | $0.050 |
+| Notarize (on-chain) | $0.050 |
+| Monitor (create) | $0.500 |
+
+**With `@x402/fetch` (automatic payment handling):**
+
+```typescript
+import { wrapFetchWithPayment } from '@x402/fetch'
+import { createWalletClient, http } from 'viem'
+import { privateKeyToAccount } from 'viem/accounts'
+import { base } from 'viem/chains'
+
+const account = privateKeyToAccount('0x...')
+const wallet = createWalletClient({ account, chain: base, transport: http() })
+
+const fetchWithPayment = wrapFetchWithPayment(fetch, wallet)
+
+// Calls the API — pays automatically if a 402 is returned
+const res = await fetchWithPayment('https://api.docimprint.com/v1/summarize', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ source: 'https://example.com/report.pdf' }),
+})
+const data = await res.json()
+```
+
+**Identity on owner routes:** For `GET`/`DELETE` operations that require ownership (e.g. fetching your bundle), pass the `payment-signature` header from a prior payment response so the API can verify your wallet address without a separate login.
 
 ---
 
