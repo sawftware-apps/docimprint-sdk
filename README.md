@@ -28,7 +28,7 @@ DocImprint turns any PDF or URL into a **tamper-evident evidence bundle** — st
 - 🔏 **Cryptographic provenance** — every bundle is EIP-191 signed at creation; optionally notarized on Base L2 via EAS for an immutable on-chain audit trail
 - 🤖 **Agent-native by design** — async jobs, webhooks, idempotency keys, and legal hold built into every request, not bolted on
 - 📎 **Beyond OCR** — citations carry exact quotes, paragraph indices, and confidence scores (`high`/`medium`/`low`), not just raw text
-- 🛠️ **10 CrewAI tools out of the box** — `research_tools()`, `legal_tools()`, `collection_tools()` pre-grouped with per-tool credit costs
+- 🛠️ **10 CrewAI tools out of the box** — `research_tools()`, `legal_tools()`, `collection_tools()` pre-grouped for common agent workflows
 - ⚖️ **Compliance-ready** — `legal_hold`, provenance logging, multi-agent handoff tracking, and on-chain notarization designed for legal and regulated industries
 - 💳 **Flexible payment** — monthly credit plans or pay-per-call USDC via x402, no account required
 
@@ -129,7 +129,7 @@ curl -X POST https://api.docimprint.com/v1/extract \
 ### Core
 
 ```typescript
-// Extract with full evidence bundle (10 credits)
+// Extract with full evidence bundle
 client.extract(params: ExtractRequest): Promise<ExtractResponse>
 
 // Verify bundle integrity — free, no auth required
@@ -138,7 +138,7 @@ client.verify(bundleId: string, quick?: boolean): Promise<VerifyResponse>
 // Download bundle ZIP
 client.download(bundleId: string): Promise<Response>
 
-// Notarize on Base L2 via EAS (7 credits)
+// Notarize on Base L2 via EAS
 client.notarize(bundleId: string): Promise<NotarizeResponse>
 
 // Delete bundle
@@ -148,19 +148,19 @@ client.deleteBundle(bundleId: string, opts?: { acknowledgeNotarized?: boolean })
 ### Focused endpoints
 
 ```typescript
-// Summarize — key points with citations (3 credits)
+// Summarize — key points with citations
 client.summarize(params: SummarizeRequest): Promise<SummarizeResponse>
 
-// Question & answer with inline citations (3 credits)
+// Question & answer with inline citations
 client.qa(params: QARequest): Promise<QAResponse>
 
-// Translate with source citations (5 credits)
+// Translate with source citations
 client.translate(params: TranslateRequest): Promise<TranslateResponse>
 
-// Claim-check — per-claim verdict with evidence (6 credits)
+// Claim-check — per-claim verdict with evidence
 client.checkClaims(params: CheckClaimsRequest): Promise<CheckClaimsResponse>
 
-// Describe image or PDF page (2 credits)
+// Describe image or PDF page
 client.describe(params: DescribeRequest): Promise<DescribeResponse>
 ```
 
@@ -169,48 +169,48 @@ client.describe(params: DescribeRequest): Promise<DescribeResponse>
 Pass `mode` to `client.extract()` for specialized extraction:
 
 ```typescript
-// Invoice parsing — merchant, date, line items, totals (6 credits)
+// Invoice parsing — merchant, date, line items, totals
 client.extract({ source, mode: 'invoice' })
 
-// Structured extraction with caller-defined schema (5 credits)
+// Structured extraction with caller-defined schema
 client.extract({ source, mode: 'extract-structured', schema: { total_usd: 'number', vendor: 'string' } })
 
-// Document comparison — supply a previous bundle to diff against (10 credits)
+// Document comparison — supply a previous bundle to diff against
 client.extract({ source, mode: 'compare', previous_bundle_id: 'ev_...' })
 
-// Lean mode — AI analysis, no stored bundle (2 credits)
+// Lean mode — AI analysis, no stored bundle
 client.extract({ source, store: false })
 ```
 
 ### Jobs & quota
 
 ```typescript
-// Get remaining API key credits (free)
+// Get remaining API key credits
 client.getQuota(): Promise<{ credits_remaining: number; credits_total: number; resets_at: string }>
 
-// Poll an async job by ID (free)
+// Poll an async job by ID
 client.getJob(jobId: string): Promise<Job>
 
-// List jobs with optional filters (free)
+// List jobs with optional filters
 client.listJobs(opts?: { status?, limit?, offset? }): Promise<{ jobs: Job[] }>
 ```
 
 ### Collections
 
 ```typescript
-// Create a named collection (free)
+// Create a named collection
 client.createCollection({ name: 'Q4 Contracts' }): Promise<Collection>
 
-// List all collections (free)
+// List all collections
 client.listCollections(): Promise<{ collections: Collection[] }>
 
-// Add a bundle to a collection and trigger async indexing (2 credits)
+// Add a bundle to a collection and trigger async indexing
 client.addToCollection(collectionId, { bundle_id }): Promise<void>
 
-// Semantic search across documents (2 credits)
+// Semantic search across documents
 client.searchCollection(collectionId, { query, limit? }): Promise<SearchCollectionResponse>
 
-// Cross-document Q&A with cited sources (3 credits)
+// Cross-document Q&A with cited sources
 client.askCollection(collectionId, { question, limit? }): Promise<AskCollectionResponse>
 ```
 
@@ -272,18 +272,18 @@ toolkit.collection_tools()    # search, ask, add_to_collection
 toolkit.all_tools()           # all 10 tools
 ```
 
-| Tool | Credits | What it does |
-|------|:-------:|---|
-| `ExtractEvidenceTool` | 10 | Full evidence bundle with citations and manifest hash |
-| `SummarizeTool` | 3 | Key points with cited paragraph references |
-| `QATool` | 3 | Cited answer with confidence score |
-| `CheckClaimsTool` | 6 | Per-claim verdict: supported / contradicted / not_found |
-| `TranslateTool` | 5 | Source-cited translation |
-| `VerifyBundleTool` | 0 | Cryptographic integrity check — manifest, hash, signature |
-| `NotarizeTool` | 7 | On-chain EAS attestation on Base L2 |
-| `SearchCollectionTool` | 2 | Semantic vector search across document collection |
-| `AskCollectionTool` | 3 | Cross-document RAG Q&A with cited sources |
-| `AddToCollectionTool` | 2 | Add bundle to collection and trigger async indexing |
+| Tool | What it does |
+|------|---|
+| `ExtractEvidenceTool` | Full evidence bundle with citations and manifest hash |
+| `SummarizeTool` | Key points with cited paragraph references |
+| `QATool` | Cited answer with confidence score |
+| `CheckClaimsTool` | Per-claim verdict: supported / contradicted / not_found |
+| `TranslateTool` | Source-cited translation |
+| `VerifyBundleTool` | Cryptographic integrity check — manifest, hash, signature |
+| `NotarizeTool` | On-chain EAS attestation on Base L2 |
+| `SearchCollectionTool` | Semantic vector search across document collection |
+| `AskCollectionTool` | Cross-document RAG Q&A with cited sources |
+| `AddToCollectionTool` | Add bundle to collection and trigger async indexing |
 
 **ProvenanceTracker** wraps all tools to automatically log agent actions and bundle handoffs — building a full audit trail across multi-agent pipelines.
 
@@ -328,38 +328,38 @@ Transport: `streamable-http` · Auth: Bearer token · [Listed on Smithery](https
 
 **URL tools** — lean mode, no bundle stored:
 
-| Tool | Credits | Description |
-|------|:-------:|---|
-| `extract_url` | 2 | Fetch URL → text + metadata |
-| `summarize_url` | 3 | Fetch URL → prose summary + key points |
-| `qa_url` | 3 | Fetch URL → cited answer to a specific question |
-| `translate_url` | 5 | Fetch URL → translated content |
+| Tool | Description |
+|------|---|
+| `extract_url` | Fetch URL → text + metadata |
+| `summarize_url` | Fetch URL → prose summary + key points |
+| `qa_url` | Fetch URL → cited answer to a specific question |
+| `translate_url` | Fetch URL → translated content |
 
 **Document tools** — accepts base64 PDF or image:
 
-| Tool | Credits | Description |
-|------|:-------:|---|
-| `extract_text` | 2 | OCR plain text from PDF / image |
-| `extract_tables` | 2 | OCR tables as Markdown from PDF / image |
-| `parse_invoice` | 6 | Structured invoice fields: merchant, line items, totals + citations |
-| `summarize_document` | 3 | Prose summary + cited key points |
-| `check_claims` | 6 | Per-claim verdict with evidence quotes |
-| `extract_structured` | 5 | Extract typed fields using a caller-defined schema |
+| Tool | Description |
+|------|---|
+| `extract_text` | OCR plain text from PDF / image |
+| `extract_tables` | OCR tables as Markdown from PDF / image |
+| `parse_invoice` | Structured invoice fields: merchant, line items, totals + citations |
+| `summarize_document` | Prose summary + cited key points |
+| `check_claims` | Per-claim verdict with evidence quotes |
+| `extract_structured` | Extract typed fields using a caller-defined schema |
 
 **Bundle & collections:**
 
-| Tool | Credits | Description |
-|------|:-------:|---|
-| `verify_bundle` | 0 | Cryptographic integrity check |
-| `get_bundle` | 0 | Bundle metadata and notarization status |
-| `notarize_bundle` | 7 | On-chain EAS attestation on Base L2 |
-| `create_collection` | 0 | Create a named document collection |
-| `list_collections` | 0 | List your collections |
-| `add_document_to_collection` | 2 | Add bundle + trigger async indexing |
-| `search_collection` | 2 | Semantic vector search |
-| `ask_collection` | 3 | Cross-document RAG Q&A |
-| `get_job_status` | 0 | Poll async job (extract, indexing, batch) |
-| `get_quota` | 0 | Check credit balance and plan status |
+| Tool | Description |
+|------|---|
+| `verify_bundle` | Cryptographic integrity check |
+| `get_bundle` | Bundle metadata and notarization status |
+| `notarize_bundle` | On-chain EAS attestation on Base L2 |
+| `create_collection` | Create a named document collection |
+| `list_collections` | List your collections |
+| `add_document_to_collection` | Add bundle + trigger async indexing |
+| `search_collection` | Semantic vector search |
+| `ask_collection` | Cross-document RAG Q&A |
+| `get_job_status` | Poll async job (extract, indexing, batch) |
+| `get_quota` | Check credit balance and plan status |
 
 **Guided prompts:** `claim_check_workflow` · `invoice_intake`
 
