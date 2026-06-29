@@ -24,7 +24,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sawftware-labs/docimprint"
+    "url": "https://github.com/sawftware-apps/docimprint-sdk"
   },
   "keywords": [
     "docimprint",
@@ -34,6 +34,14 @@
     "mcp",
     "ai-agents",
     "usdc",
-    "base"
+    "base",
+    "pdf",
+    "ocr",
+    "citations",
+    "claim-check",
+    "crewai",
+    "notarization",
+    "compliance",
+    "invoice-parsing"
   ]
 }

@@ -4,50 +4,69 @@
 
 <p align="center">
   <strong>Document memory agents can prove.</strong><br/>
-  PDFs & URLs → cited answers · evidence bundles · on-chain attestation
+  PDFs &amp; URLs → cited answers · evidence bundles · on-chain attestation
 </p>
 
 <p align="center">
   <a href="https://www.npmjs.com/package/docimprint"><img src="https://img.shields.io/npm/v/docimprint?color=0ea5e9&labelColor=0a0a0a" alt="npm version" /></a>
   <a href="https://www.npmjs.com/package/docimprint"><img src="https://img.shields.io/npm/dm/docimprint?color=0ea5e9&labelColor=0a0a0a" alt="npm downloads" /></a>
-  <a href="https://www.npmjs.com/package/docimprint"><img src="https://img.shields.io/badge/npm%20install-docimprint-0ea5e9?logo=npm&labelColor=0a0a0a" alt="npm install docimprint" /></a>
-  <a href="https://docimprint.com/docs"><img src="https://img.shields.io/badge/docs-docimprint.com-0ea5e9?labelColor=0a0a0a" alt="docs" /></a>
+  <a href="https://pypi.org/project/docimprint/"><img src="https://img.shields.io/pypi/v/docimprint?color=0ea5e9&labelColor=0a0a0a" alt="PyPI version" /></a>
+  <a href="https://pypi.org/project/docimprint/"><img src="https://img.shields.io/pypi/dm/docimprint?color=0ea5e9&labelColor=0a0a0a" alt="PyPI downloads" /></a>
   <a href="https://api.docimprint.com/mcp"><img src="https://img.shields.io/badge/MCP-streamable--http-0ea5e9?labelColor=0a0a0a" alt="MCP" /></a>
   <a href="https://api.docimprint.com/openapi.json"><img src="https://img.shields.io/badge/OpenAPI-spec-0ea5e9?labelColor=0a0a0a" alt="OpenAPI" /></a>
+  <a href="https://docimprint.com/docs"><img src="https://img.shields.io/badge/docs-docimprint.com-0ea5e9?labelColor=0a0a0a" alt="docs" /></a>
 </p>
 
 ---
 
 ## What is DocImprint?
 
-DocImprint turns any PDF or URL into a **tamper-evident evidence bundle** — structured data, AI-cited answers, and a cryptographic proof your agents can verify independently.
+DocImprint turns any PDF or URL into a **tamper-evident evidence bundle** — structured data, AI-cited answers, and a cryptographic proof your agents can verify independently. Built for agents that need to prove what they read.
 
-| Feature | Description |
-|---------|-------------|
-| **Extract** | Markdown, tables, structured data, invoice parsing |
-| **Summarize & Q&A** | AI answers with inline citations and confidence scores |
-| **Claim-check** | Verify factual claims against the source document |
-| **Collections** | Cross-document semantic search and Q&A |
-| **Notarize** | On-chain attestation via Base L2 (EAS) |
-| **MCP server** | Native tool support for Claude, GPT, and any MCP client |
-| **x402 payments** | Pay per call with USDC — no account required |
+## Why DocImprint?
+
+- 🔏 **Cryptographic provenance** — every bundle is EIP-191 signed at creation; optionally notarized on Base L2 via EAS for an immutable on-chain audit trail
+- 🤖 **Agent-native by design** — async jobs, webhooks, idempotency keys, and legal hold built into every request, not bolted on
+- 📎 **Beyond OCR** — citations carry exact quotes, paragraph indices, and confidence scores (`high`/`medium`/`low`), not just raw text
+- 🛠️ **10 CrewAI tools out of the box** — `research_tools()`, `legal_tools()`, `collection_tools()` pre-grouped with per-tool credit costs
+- ⚖️ **Compliance-ready** — `legal_hold`, provenance logging, multi-agent handoff tracking, and on-chain notarization designed for legal and regulated industries
+- 💳 **Flexible payment** — monthly credit plans or pay-per-call USDC via x402, no account required
+
+---
+
+## Features
+
+| Capability | Method / Mode | Description |
+|---|---|---|
+| **Extract** | `extract()` | Full evidence bundle — markdown, summary, cited key points, artifacts, manifest SHA-256 |
+| **Invoice parsing** | `mode: 'invoice'` | Structured `InvoiceResult`: merchant, date, line items, subtotal, tax, total — all with citations |
+| **Document comparison** | `mode: 'compare'` | Diff two documents; supply `previous_bundle_id` to track changes |
+| **Structured extraction** | `mode: 'extract-structured'` | Extract typed fields using a caller-defined JSON Schema |
+| **Summarize** | `summarize()` | Prose summary + key points, each with cited paragraph references |
+| **Q&A** | `qa()` | Single-question answer with inline citations and confidence score |
+| **Claim-check** | `checkClaims()` | Per-claim verdict: `supported` / `contradicted` / `not_found` with evidence quotes |
+| **Translate** | `translate()` | Source-cited translation to any language |
+| **Describe** | `describe()` | AI description of image or PDF page contents |
+| **Collections** | `createCollection()` + `searchCollection()` + `askCollection()` | Semantic search + cross-document RAG Q&A across multiple bundles |
+| **Verify** | `verify()` | Cryptographic integrity check — manifest hash, EIP-191 signature, artifact hashes. Free, no auth |
+| **Notarize** | `notarize()` | Write manifest SHA-256 to Base L2 via EAS — permanent, immutable attestation |
+| **MCP server** | 20 tools · 2 prompts | Native MCP for Claude, Cursor, and any MCP-compatible client |
+| **x402** | REST `X-Payment` header | Pay per call in USDC — no account required |
 
 ---
 
 ## Install
 
 ```bash
-npm install docimprint
+npm install docimprint           # TypeScript / Node.js
 ```
-
-### Python + CrewAI
 
 ```bash
-pip install docimprint           # REST client
-pip install "docimprint[crewai]"  # + CrewAI tools & toolkit
+pip install docimprint           # Python REST client
+pip install "docimprint[crewai]" # + 10 CrewAI tools & ProvenanceTracker
 ```
 
-Source lives in [`python/`](python/) in this repo. PyPI: [docimprint](https://pypi.org/project/docimprint/).
+Python source lives in [`python/`](python/). PyPI: [docimprint](https://pypi.org/project/docimprint/).
 
 ---
 
@@ -58,7 +77,7 @@ import { DocImprintClient } from 'docimprint'
 
 const client = new DocImprintClient({ apiKey: 'dr_live_...' })
 
-// Extract a PDF and get a verifiable evidence bundle
+// Extract a PDF into a tamper-evident evidence bundle
 const result = await client.extract({
   source: 'https://example.com/contract.pdf',
   include: ['markdown', 'summary'],
@@ -67,18 +86,50 @@ const result = await client.extract({
 console.log(result.bundle_id)        // ev_01j...
 console.log(result.summary)          // AI-generated summary
 console.log(result.manifest_sha256)  // tamper-evident hash
+
+// Citation shape: { quote, paragraphs, confidence }
+console.log(result.key_points_cited[0].citations[0].quote)
 ```
 
-Get an API key at [docimprint.com](https://docimprint.com).
+Get an API key at [docimprint.com](https://docimprint.com) — free tier available, no credit card required.
+
+<details>
+<summary>Python</summary>
+
+```python
+from docimprint import DocImprintClient
+
+client = DocImprintClient(api_key="dr_live_...")
+
+result = client.extract(
+    url="https://example.com/contract.pdf",
+    include=["markdown", "summary"],
+)
+print(result["bundle_id"])         # ev_01j...
+print(result["summary"])           # AI-generated summary
+print(result["manifest_sha256"])   # tamper-evident hash
+```
+</details>
+
+<details>
+<summary>REST API (cURL)</summary>
+
+```bash
+curl -X POST https://api.docimprint.com/v1/extract \
+  -H "Authorization: Bearer dr_live_..." \
+  -H "Content-Type: application/json" \
+  -d '{"source": "https://example.com/contract.pdf", "include": ["markdown", "summary"]}'
+```
+</details>
 
 ---
 
-## Methods
+## API Methods
 
 ### Core
 
 ```typescript
-// Extract with evidence bundle
+// Extract with full evidence bundle (10 credits)
 client.extract(params: ExtractRequest): Promise<ExtractResponse>
 
 // Verify bundle integrity — free, no auth required
@@ -87,7 +138,7 @@ client.verify(bundleId: string, quick?: boolean): Promise<VerifyResponse>
 // Download bundle ZIP
 client.download(bundleId: string): Promise<Response>
 
-// Notarize on Base L2 ($0.05)
+// Notarize on Base L2 via EAS (7 credits)
 client.notarize(bundleId: string): Promise<NotarizeResponse>
 
 // Delete bundle
@@ -97,53 +148,222 @@ client.deleteBundle(bundleId: string, opts?: { acknowledgeNotarized?: boolean })
 ### Focused endpoints
 
 ```typescript
-// Summarize ($0.018)
+// Summarize — key points with citations (3 credits)
 client.summarize(params: SummarizeRequest): Promise<SummarizeResponse>
 
-// Question & answer ($0.022)
+// Question & answer with inline citations (3 credits)
 client.qa(params: QARequest): Promise<QAResponse>
 
-// Translate ($0.040)
+// Translate with source citations (5 credits)
 client.translate(params: TranslateRequest): Promise<TranslateResponse>
 
-// Claim-check ($0.025)
+// Claim-check — per-claim verdict with evidence (6 credits)
 client.checkClaims(params: CheckClaimsRequest): Promise<CheckClaimsResponse>
 
-// Describe image or PDF ($0.018)
+// Describe image or PDF page (2 credits)
 client.describe(params: DescribeRequest): Promise<DescribeResponse>
 ```
 
-### Async jobs
+### Extract modes
+
+Pass `mode` to `client.extract()` for specialized extraction:
 
 ```typescript
-// Get remaining API key quota
+// Invoice parsing — merchant, date, line items, totals (6 credits)
+client.extract({ source, mode: 'invoice' })
+
+// Structured extraction with caller-defined schema (5 credits)
+client.extract({ source, mode: 'extract-structured', schema: { total_usd: 'number', vendor: 'string' } })
+
+// Document comparison — supply a previous bundle to diff against (10 credits)
+client.extract({ source, mode: 'compare', previous_bundle_id: 'ev_...' })
+
+// Lean mode — AI analysis, no stored bundle (2 credits)
+client.extract({ source, store: false })
+```
+
+### Jobs & quota
+
+```typescript
+// Get remaining API key credits (free)
 client.getQuota(): Promise<{ credits_remaining: number; credits_total: number; resets_at: string }>
 
-// Poll a job by ID
+// Poll an async job by ID (free)
 client.getJob(jobId: string): Promise<Job>
 
-// List jobs with optional filters
+// List jobs with optional filters (free)
 client.listJobs(opts?: { status?, limit?, offset? }): Promise<{ jobs: Job[] }>
 ```
 
 ### Collections
 
 ```typescript
-// Create a named collection
+// Create a named collection (free)
 client.createCollection({ name: 'Q4 Contracts' }): Promise<Collection>
 
-// List all collections
+// List all collections (free)
 client.listCollections(): Promise<{ collections: Collection[] }>
 
-// Add a bundle to a collection
+// Add a bundle to a collection and trigger async indexing (2 credits)
 client.addToCollection(collectionId, { bundle_id }): Promise<void>
 
-// Semantic search across documents
+// Semantic search across documents (2 credits)
 client.searchCollection(collectionId, { query, limit? }): Promise<SearchCollectionResponse>
 
-// Cross-document Q&A with citations
+// Cross-document Q&A with cited sources (3 credits)
 client.askCollection(collectionId, { question, limit? }): Promise<AskCollectionResponse>
 ```
+
+---
+
+## Agent-Native Features
+
+DocImprint is designed for autonomous agent workflows, not just synchronous API calls.
+
+```typescript
+// Fire-and-forget async extraction — returns job_id immediately
+const job = await client.extract({
+  source: 'https://example.com/large-report.pdf',
+  async: true,
+  webhook: 'https://your-agent.io/callback',  // push result when done
+  idempotency_key: 'report-2025-q4',          // safe to retry without double-processing
+  legal_hold: true,                           // prevent deletion for compliance
+})
+
+// Poll job status
+const status = await client.getJob(job.job_id)
+// { status: 'complete', bundle_id: 'ev_...', progress_pct: 100 }
+
+// Monitor a URL for changes — get notified on diff
+await client.extract({
+  source: 'https://example.com/terms.html',
+  monitor: { webhook: 'https://your-agent.io/changes', mode: 'diff' },
+})
+```
+
+**Python: provenance & multi-agent handoff tracking**
+
+```python
+# Log an agent action on a bundle (audit trail)
+client.log_provenance(bundle_id="ev_...", agent_id="agent-research", action="extracted")
+
+# Record a handoff between agents
+client.handoff(bundle_id="ev_...", from_agent="agent-research", to_agent="agent-legal", note="ready for claim check")
+```
+
+---
+
+## CrewAI Integration
+
+10 purpose-built tools for CrewAI agents, organized into preset groups.
+
+```python
+from docimprint.crewai import DocImprintToolkit
+
+toolkit = DocImprintToolkit(
+    api_key="dr_live_...",
+    collection_id="col_...",  # required for collection tools
+)
+
+# Preset tool groups
+toolkit.research_tools()      # extract, summarize, qa, check_claims
+toolkit.legal_tools()         # check_claims, verify, notarize
+toolkit.collection_tools()    # search, ask, add_to_collection
+toolkit.all_tools()           # all 10 tools
+```
+
+| Tool | Credits | What it does |
+|------|:-------:|---|
+| `ExtractEvidenceTool` | 10 | Full evidence bundle with citations and manifest hash |
+| `SummarizeTool` | 3 | Key points with cited paragraph references |
+| `QATool` | 3 | Cited answer with confidence score |
+| `CheckClaimsTool` | 6 | Per-claim verdict: supported / contradicted / not_found |
+| `TranslateTool` | 5 | Source-cited translation |
+| `VerifyBundleTool` | 0 | Cryptographic integrity check — manifest, hash, signature |
+| `NotarizeTool` | 7 | On-chain EAS attestation on Base L2 |
+| `SearchCollectionTool` | 2 | Semantic vector search across document collection |
+| `AskCollectionTool` | 3 | Cross-document RAG Q&A with cited sources |
+| `AddToCollectionTool` | 2 | Add bundle to collection and trigger async indexing |
+
+**ProvenanceTracker** wraps all tools to automatically log agent actions and bundle handoffs — building a full audit trail across multi-agent pipelines.
+
+```python
+from docimprint.crewai import DocImprintToolkit, ProvenanceTracker
+
+tracker = ProvenanceTracker(client=toolkit.client)
+trackable = toolkit.trackable_tools()  # all tools wrapped with provenance logging
+```
+
+**DocImprintKnowledgeSource** integrates with CrewAI's knowledge system for retrieval-augmented agents.
+
+---
+
+## MCP Server
+
+DocImprint exposes a native MCP server for use with Claude, Cursor, and any MCP-compatible client.
+
+**Install via Smithery (one command):**
+```bash
+npx @smithery/cli install docimprint --client claude
+```
+
+**Manual config:**
+```json
+{
+  "mcpServers": {
+    "docimprint": {
+      "type": "streamable-http",
+      "url": "https://api.docimprint.com/mcp",
+      "headers": {
+        "Authorization": "Bearer dr_live_..."
+      }
+    }
+  }
+}
+```
+
+Transport: `streamable-http` · Auth: Bearer token · [Listed on Smithery](https://smithery.ai/server/docimprint) · [Listed on Glama](https://glama.ai/mcp/servers/docimprint)
+
+### MCP Tools
+
+**URL tools** — lean mode, no bundle stored:
+
+| Tool | Credits | Description |
+|------|:-------:|---|
+| `extract_url` | 2 | Fetch URL → text + metadata |
+| `summarize_url` | 3 | Fetch URL → prose summary + key points |
+| `qa_url` | 3 | Fetch URL → cited answer to a specific question |
+| `translate_url` | 5 | Fetch URL → translated content |
+
+**Document tools** — accepts base64 PDF or image:
+
+| Tool | Credits | Description |
+|------|:-------:|---|
+| `extract_text` | 2 | OCR plain text from PDF / image |
+| `extract_tables` | 2 | OCR tables as Markdown from PDF / image |
+| `parse_invoice` | 6 | Structured invoice fields: merchant, line items, totals + citations |
+| `summarize_document` | 3 | Prose summary + cited key points |
+| `check_claims` | 6 | Per-claim verdict with evidence quotes |
+| `extract_structured` | 5 | Extract typed fields using a caller-defined schema |
+
+**Bundle & collections:**
+
+| Tool | Credits | Description |
+|------|:-------:|---|
+| `verify_bundle` | 0 | Cryptographic integrity check |
+| `get_bundle` | 0 | Bundle metadata and notarization status |
+| `notarize_bundle` | 7 | On-chain EAS attestation on Base L2 |
+| `create_collection` | 0 | Create a named document collection |
+| `list_collections` | 0 | List your collections |
+| `add_document_to_collection` | 2 | Add bundle + trigger async indexing |
+| `search_collection` | 2 | Semantic vector search |
+| `ask_collection` | 3 | Cross-document RAG Q&A |
+| `get_job_status` | 0 | Poll async job (extract, indexing, batch) |
+| `get_quota` | 0 | Check credit balance and plan status |
+
+**Guided prompts:** `claim_check_workflow` · `invoice_intake`
+
+**Resource:** `bundle://{bundle_id}` — read bundle metadata directly
 
 ---
 
@@ -184,6 +404,9 @@ All request and response types are exported:
 import type {
   ExtractRequest,
   ExtractResponse,
+  Citation,
+  CitedField,
+  InvoiceResult,
   Job,
   Collection,
   SearchResult,
@@ -192,15 +415,13 @@ import type {
 
 ---
 
-## MCP server
+## Pricing
 
-DocImprint exposes a native MCP server for use with Claude, Cursor, and any MCP-compatible client:
-
-```
-https://api.docimprint.com/mcp
-```
-
-Transport: `streamable-http` · Auth: Bearer token (your API key)
+| Plan | Credits / month | Price |
+|------|:---------------:|-------|
+| Free | 500 | $0 — no credit card |
+| Pro | 10,000 | [See pricing](https://docimprint.com/pricing) |
+| x402 | Pay-per-call | From $0.018 / call (USDC) |
 
 ---
 

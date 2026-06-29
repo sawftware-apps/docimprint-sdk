@@ -10,6 +10,20 @@ readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
 authors = [{ name = "DocImprint" }]
+keywords = ["docimprint", "document-intelligence", "evidence-bundle", "ocr", "citations", "crewai", "mcp", "x402", "compliance", "invoice-parsing", "claim-check", "notarization", "pdf", "ai-agents"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Office/Business :: Financial",
+  "Topic :: Text Processing :: General",
+]
 dependencies = [
   "httpx>=0.27",
   "pydantic>=2.0",
