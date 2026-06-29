@@ -397,25 +397,9 @@ const client = new DocImprintClient({ apiKey: 'dr_live_...' })
 
 ### x402 USDC payments
 
-Pay per call in USDC on Base mainnet — **no account, no sign-up, no API key required**. Any EVM wallet can call the API directly.
+DocImprint supports the [x402 open standard](https://x402.org) — pay per call in USDC on Base, straight from any EVM wallet. **No account. No sign-up. No API key.** Your agent can call the API autonomously without any human-managed credentials.
 
-**How it works:** DocImprint implements the [x402 open standard](https://x402.org). The API returns a `402 Payment Required` response with payment details; your client pays automatically and retries with the `X-Payment` header.
-
-**Prices per call (USDC on Base):**
-
-| Operation | Price |
-|-----------|------:|
-| Extract (full bundle) | $0.075 |
-| Summarize | $0.018 |
-| Q&A | $0.022 |
-| Translate | $0.040 |
-| Claim-check | $0.025 |
-| Describe | $0.018 |
-| Lean extract (no bundle) | $0.010 |
-| Collection search | $0.030 |
-| Collection ask | $0.050 |
-| Notarize (on-chain) | $0.050 |
-| Monitor (create) | $0.500 |
+The API is x402-native: it returns a standard `402 Payment Required` response with on-chain payment details, your client settles in USDC, and the request completes automatically. From $0.01 / call.
 
 **With `@x402/fetch` (automatic payment handling):**
 
@@ -464,11 +448,7 @@ import type {
 
 ## Pricing
 
-| Plan | Credits / month | Price |
-|------|:---------------:|-------|
-| Free | 500 | $0 — no credit card |
-| Pro | 10,000 | [See pricing](https://docimprint.com/pricing) |
-| x402 | Pay-per-call | From $0.018 / call (USDC) |
+Free tier available — no credit card required. Monthly credit plans via Stripe, or pay per call in USDC via x402. [See pricing →](https://docimprint.com/pricing)
 
 ---
 
