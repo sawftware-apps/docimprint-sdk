@@ -4,7 +4,7 @@
   "description": "AI document intelligence: extract, summarize, claim-check, and notarize with on-chain proofs.",
   "version": "1.0.0",
   "repository": {
-    "url": "https://github.com/sawftware-labs/docimprint",
+    "url": "https://github.com/sawftware-apps/docimprint-sdk",
     "source": "github"
   },
   "remotes": [
