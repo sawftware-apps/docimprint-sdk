@@ -1,6 +1,6 @@
 {
   "name": "docimprint",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Official TypeScript SDK for the DocImprint document intelligence API",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -12,12 +12,19 @@
       "types": "./dist/index.d.ts"
     }
   },
+  "bin": {
+    "docimprint-mcp": "./dist/mcp-stdio.js"
+  },
   "files": ["dist"],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "build": "tsup src/index.ts src/mcp-stdio.ts --format cjs,esm --dts --clean --shims",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "mcp-remote": "0.1.38"
+  },
   "devDependencies": {
+    "@types/node": "^22.10.0",
     "tsup": "^8.0.0",
     "typescript": "^5.4.0"
   },
