@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "com.docimprint/api",
   "description": "AI document intelligence: extract, summarize, claim-check, and notarize with on-chain proofs.",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "repository": {
     "url": "https://github.com/sawftware-apps/docimprint-sdk",
     "source": "github"
