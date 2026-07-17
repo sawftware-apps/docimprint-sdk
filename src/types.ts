@@ -70,6 +70,60 @@ export interface ManifestSignatureBlock {
   signed_at: string
 }
 
+// ── Action receipts ─────────────────────────────────────────────────────────
+
+/** A signed, tamper-evident receipt binding an actor + action to the exact
+ *  manifest_sha256 acted upon. Returned inline by verify/notarize/addToCollection
+ *  when the request produced one (null if no signing key is configured). */
+export interface ActionReceipt {
+  receipt_id: string
+  bundle_id: string
+  agent_id: string
+  action: string
+  manifest_sha256: string
+  signed_at: string
+  signature: string
+  signer_address: string
+  key_id: string
+  algorithm: 'secp256k1-eip191'
+}
+
+/** A receipt as stored/listed — same data as ActionReceipt, different field names
+ *  (id instead of receipt_id, created_at instead of signed_at), matching the raw DB row. */
+export interface ActionReceiptRecord {
+  id: string
+  bundle_id: string
+  agent_id: string
+  action: string
+  manifest_sha256: string
+  signature: string
+  signer_address: string
+  key_id: string
+  algorithm: string
+  created_at: string
+}
+
+export interface ListReceiptsResponse {
+  bundle_id: string
+  receipts: ActionReceiptRecord[]
+  limit: number
+  offset: number
+}
+
+export interface VerifyReceiptResponse {
+  receipt_id: string
+  valid: boolean
+  signature_valid: boolean
+  manifest_matches_current: boolean
+  bundle_id: string
+  agent_id: string
+  action: string
+  manifest_sha256: string
+  signer_address: string
+  signed_at: string
+  tampered: string[]
+}
+
 // ── Extract ──────────────────────────────────────────────────────────────────
 
 export interface ExtractRequest {
@@ -243,6 +297,15 @@ export interface AddToCollectionRequest {
   bundle_id: string
 }
 
+export interface AddToCollectionResponse {
+  collection_id: string
+  bundle_id: string
+  job_id?: string
+  status?: 'queued' | 'indexed'
+  chunk_count?: number
+  receipt?: ActionReceipt | null
+}
+
 export interface SearchCollectionRequest {
   query: string
   limit?: number
@@ -282,6 +345,7 @@ export interface VerifyResponse {
   artifacts_valid: boolean
   checked_at: string
   tamper_details?: string[]
+  receipt?: ActionReceipt | null
 }
 
 // ── Notarize ──────────────────────────────────────────────────────────────────
@@ -292,4 +356,5 @@ export interface NotarizeResponse {
   network: string
   eas_attestation_uid?: string
   attested_at: string
+  receipt?: ActionReceipt | null
 }

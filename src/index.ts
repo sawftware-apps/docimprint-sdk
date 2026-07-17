@@ -30,6 +30,7 @@ export type {
   Collection,
   CreateCollectionRequest,
   AddToCollectionRequest,
+  AddToCollectionResponse,
   SearchCollectionRequest,
   SearchResult,
   SearchCollectionResponse,
@@ -37,4 +38,8 @@ export type {
   AskCollectionResponse,
   VerifyResponse,
   NotarizeResponse,
+  ActionReceipt,
+  ActionReceiptRecord,
+  ListReceiptsResponse,
+  VerifyReceiptResponse,
 } from './types'

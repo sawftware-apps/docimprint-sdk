@@ -23,6 +23,9 @@ import type {
   AskCollectionResponse,
   VerifyResponse,
   NotarizeResponse,
+  AddToCollectionResponse,
+  ListReceiptsResponse,
+  VerifyReceiptResponse,
 } from './types'
 
 const DEFAULT_BASE_URL = 'https://api.docimprint.com'
@@ -99,6 +102,20 @@ export class DocImprintClient {
     return this.request<void>('DELETE', `/v1/extract/${bundleId}${qs}`)
   }
 
+  // ── Action receipts ──────────────────────────────────────────────────────────
+
+  listReceipts(bundleId: string, opts?: { limit?: number; offset?: number }): Promise<ListReceiptsResponse> {
+    const params = new URLSearchParams()
+    if (opts?.limit != null) params.set('limit', String(opts.limit))
+    if (opts?.offset != null) params.set('offset', String(opts.offset))
+    const qs = params.size > 0 ? `?${params}` : ''
+    return this.request<ListReceiptsResponse>('GET', `/v1/extract/${bundleId}/receipts${qs}`)
+  }
+
+  verifyReceipt(receiptId: string): Promise<VerifyReceiptResponse> {
+    return this.request<VerifyReceiptResponse>('GET', `/v1/extract/receipts/${receiptId}/verify`)
+  }
+
   // ── Focused endpoints ────────────────────────────────────────────────────────
 
   summarize(params: SummarizeRequest): Promise<SummarizeResponse> {
@@ -150,8 +167,8 @@ export class DocImprintClient {
     return this.request<{ collections: Collection[] }>('GET', '/v1/collections')
   }
 
-  addToCollection(collectionId: string, params: AddToCollectionRequest): Promise<void> {
-    return this.request<void>('POST', `/v1/collections/${collectionId}/documents`, params)
+  addToCollection(collectionId: string, params: AddToCollectionRequest): Promise<AddToCollectionResponse> {
+    return this.request<AddToCollectionResponse>('POST', `/v1/collections/${collectionId}/documents`, params)
   }
 
   searchCollection(
