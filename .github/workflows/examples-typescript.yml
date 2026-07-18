@@ -1,0 +1,36 @@
+name: Examples TypeScript
+
+on:
+  push:
+    paths:
+      - "examples/typescript/**"
+      - "src/**"
+      - ".github/workflows/examples-typescript.yml"
+  pull_request:
+    paths:
+      - "examples/typescript/**"
+      - "src/**"
+      - ".github/workflows/examples-typescript.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: examples/typescript
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: examples/typescript/package-lock.json
+      - name: Build SDK
+        working-directory: .
+        run: npm ci && npm run build
+      - name: Install examples
+        run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Test
+        run: npm test

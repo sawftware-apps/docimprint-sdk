@@ -1,0 +1,26 @@
+{
+  "name": "docimprint-examples-typescript",
+  "version": "0.1.0",
+  "private": true,
+  "description": "DocImprint TypeScript demos: prove what an agent read — claim-check, evidence bundles, action receipts",
+  "type": "module",
+  "scripts": {
+    "prove": "tsx src/prove-what-agent-read.ts",
+    "production-flow": "tsx src/production-flow.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test src/shared.test.ts"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "docimprint": "file:../..",
+    "dotenv": "^16.4.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

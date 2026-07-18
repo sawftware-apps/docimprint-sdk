@@ -1,2 +1,13 @@
 node_modules/
 dist/
+examples/python/.venv/
+examples/python/venv/
+examples/python/out/
+examples/python/.env
+examples/python/**/__pycache__/
+examples/python/**/*.egg-info/
+examples/python/.pytest_cache/
+examples/typescript/node_modules/
+examples/typescript/out/
+examples/typescript/.env
+examples/typescript/dist/

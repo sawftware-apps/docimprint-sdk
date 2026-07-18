@@ -1,0 +1,39 @@
+MASTER SERVICES AGREEMENT
+Sawftware Demo Contract — DocImprint Example Fixture
+Version: 1.0
+Effective Date: January 1, 2026
+
+1. PARTIES
+This Master Services Agreement ("Agreement") is entered into between Acme Corp ("Customer")
+and Northwind Labs Inc. ("Provider").
+
+2. TERM
+This Agreement begins on the Effective Date and continues for twelve (12) months, unless
+earlier terminated in accordance with Section 5.
+
+3. FEES
+Customer shall pay Provider a monthly fee of USD 4,500, invoiced in arrears within fifteen
+(15) days of each calendar month end. Late payments accrue interest at 1.5% per month.
+
+4. CONFIDENTIALITY
+Each party shall keep Confidential Information secret for three (3) years after termination
+of this Agreement, except for information that is publicly available without breach.
+
+5. TERMINATION
+Either party may terminate this Agreement for convenience by providing thirty (30) days'
+prior written notice to the other party. Termination for material breach requires written
+notice and a fifteen (15) day cure period.
+
+6. LIABILITY
+Provider's aggregate liability under this Agreement shall not exceed the fees paid by
+Customer in the twelve (12) months preceding the claim. Neither party is liable for
+indirect, incidental, or consequential damages.
+
+7. GOVERNING LAW
+This Agreement is governed by the laws of the State of Delaware, excluding conflict-of-law
+rules. Disputes shall be resolved in the state or federal courts located in Wilmington,
+Delaware.
+
+8. ENTIRE AGREEMENT
+This Agreement constitutes the entire agreement between the parties and supersedes all
+prior negotiations relating to its subject matter.

@@ -1,0 +1,10 @@
+{
+  "claims": [
+    "Either party may terminate this Agreement for convenience with thirty days' prior written notice.",
+    "Customer may terminate this Agreement at any time without notice and without cause."
+  ],
+  "notes": {
+    "0": "Supported — matches Section 5 (30-day written notice).",
+    "1": "Gotcha — contradicted / not found; the MSA requires notice and does not allow silent no-cause termination."
+  }
+}

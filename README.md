@@ -33,6 +33,7 @@
 - [Use cases](#use-cases)
 - [Install](#install)
 - [Quick start](#quick-start)
+- [Examples](#examples)
 - [Features](#features)
 - [Why DocImprint?](#why-docimprint)
 - [Agent-native features](#agent-native-features)
@@ -214,6 +215,28 @@ curl -X POST https://api.docimprint.com/v1/extract \
   -H "Content-Type: application/json" \
   -d '{"source": "https://example.com/contract.pdf", "include": ["markdown", "summary"]}'
 ```
+
+---
+
+## Examples
+
+Runnable demos that show the full proof story — claim-check with citations, a stored evidence bundle, and a signed action receipt:
+
+```bash
+# Python
+cd examples/python
+pip install -e .
+cp .env.example .env   # set DOCIMPRINT_API_KEY
+python -m docimprint_examples.prove_what_agent_read
+
+# TypeScript
+cd examples/typescript
+npm install
+cp .env.example .env   # set DOCIMPRINT_API_KEY
+npm run prove
+```
+
+See [`examples/README.md`](examples/README.md) for both languages and what each artifact proves.
 
 ---
 
@@ -503,6 +526,8 @@ Questions, integrations, and announcements: [GitHub Discussions](https://github.
 
 - [Documentation](https://docimprint.com/docs)
 - [API Reference](https://api.docimprint.com/openapi.json)
+- [Python examples](examples/python) — prove what an agent read
+- [TypeScript examples](examples/typescript) — same demo in Node/TS
 - [Evidence bundles](https://docimprint.com/evidence-bundles)
 - [x402 payments](https://docimprint.com/x402)
 - [Pricing](https://docimprint.com/pricing)
