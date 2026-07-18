@@ -11,7 +11,7 @@ license = "MIT"
 requires-python = ">=3.10"
 authors = [{ name = "DocImprint" }]
 dependencies = [
-  "docimprint>=0.1.1",
+  "docimprint>=0.2.1",
   "httpx>=0.27",
   "python-dotenv>=1.0",
   "rich>=13.0",
@@ -19,10 +19,13 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "respx>=0.21"]
+crewai = ["docimprint[crewai]>=0.2.1"]
 
 [project.scripts]
 docimprint-prove = "docimprint_examples.prove_what_agent_read:main"
 docimprint-production-flow = "docimprint_examples.production_flow:main"
+docimprint-collection-qa = "docimprint_examples.collection_qa:main"
+docimprint-crewai-legal-review = "docimprint_examples.crewai_legal_review:main"
 
 [project.urls]
 Homepage = "https://docimprint.com"

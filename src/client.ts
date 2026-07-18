@@ -79,7 +79,14 @@ export class DocImprintClient {
   // ── Core ────────────────────────────────────────────────────────────────────
 
   extract(params: ExtractRequest): Promise<ExtractResponse> {
-    return this.request<ExtractResponse>('POST', '/v1/extract', params)
+    // The API only honors sync/store as query params, not body fields — default
+    // to synchronous processing (matching the Python SDK) unless the caller
+    // opts into async via `async: true`.
+    const query = new URLSearchParams()
+    if (!params.async) query.set('sync', 'true')
+    if (params.store !== undefined) query.set('store', String(params.store))
+    const qs = query.toString()
+    return this.request<ExtractResponse>('POST', `/v1/extract${qs ? `?${qs}` : ''}`, params)
   }
 
   verify(bundleId: string, quick?: boolean): Promise<VerifyResponse> {

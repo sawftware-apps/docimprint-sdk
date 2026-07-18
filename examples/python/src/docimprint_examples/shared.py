@@ -18,8 +18,6 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
 
-from docimprint_examples.receipts import ReceiptClient
-
 REPO_ROOT = Path(__file__).resolve().parents[2]  # examples/python
 EXAMPLES_ROOT = Path(__file__).resolve().parents[3]  # examples/
 FIXTURES_DIR = EXAMPLES_ROOT / "fixtures"
@@ -34,16 +32,14 @@ err_console = Console(stderr=True)
 
 @dataclass
 class DemoSession:
-    """Shared HTTP session for SDK client + receipt helpers + multipart uploads."""
+    """Shared HTTP session for SDK client + multipart uploads."""
 
     api_key: str
     base_url: str
     http: httpx.Client
     client: DocImprintClient
-    receipts: ReceiptClient
 
     def close(self) -> None:
-        self.receipts.close()
         self.client.close()
         self.http.close()
 
@@ -76,14 +72,20 @@ def open_session(api_key: str, base_url: str, *, timeout: float = 120.0) -> Demo
         headers={"Authorization": f"Bearer {api_key}"},
     )
     client = DocImprintClient(api_key, base_url=base_url, timeout=timeout, client=http)
-    receipts = ReceiptClient(api_key, base_url=base_url, timeout=timeout, client=http)
     return DemoSession(
         api_key=api_key,
         base_url=base_url.rstrip("/"),
         http=http,
         client=client,
-        receipts=receipts,
     )
+
+
+def cited_text(value: Any) -> tuple[str, list[dict[str, Any]]]:
+    """Some endpoints return a plain string, others a cited field ({value, confidence, citations})."""
+    if isinstance(value, dict) and "value" in value:
+        citations = value.get("citations")
+        return str(value.get("value") or ""), citations if isinstance(citations, list) else []
+    return str(value or ""), []
 
 
 def manifest_sha256(payload: dict[str, Any]) -> str | None:
@@ -330,7 +332,7 @@ def extract_uploaded_file(
 
 
 def require_valid_receipt(
-    receipts: ReceiptClient,
+    client: DocImprintClient,
     *,
     bundle_id: str,
     preferred_id: str | None,
@@ -338,7 +340,7 @@ def require_valid_receipt(
 ) -> tuple[dict[str, Any] | None, list[dict[str, Any]], list[str]]:
     """List receipts, verify one, or fail unless allow_missing."""
     warnings: list[str] = []
-    listed = receipts.list_receipts(bundle_id)
+    listed = client.list_receipts(bundle_id)
     receipt_rows = listed.get("receipts") or []
     if not isinstance(receipt_rows, list):
         receipt_rows = []
@@ -359,7 +361,7 @@ def require_valid_receipt(
             details={"bundle_id": bundle_id, "inline_receipt_id": preferred_id},
         )
 
-    check = receipts.verify_receipt(chosen_id)
+    check = client.verify_receipt(chosen_id)
     receipt_verify = {
         "receipt_id": check.get("receipt_id") or chosen_id,
         "valid": bool(check.get("valid")),

@@ -20,7 +20,7 @@ cp .env.example .env
 npm run prove
 ```
 
-Uses the local SDK via `"docimprint": "file:../.."` so you get the receipts APIs from this checkout.
+Installs `docimprint` from npm (`^0.2.0`), same as any real project would — not a local monorepo path.
 
 ## What you'll see
 
@@ -53,8 +53,13 @@ Shareable artifacts
 |------|---------|---------------|
 | **Prove what the agent read** (start here) | `npm run prove` | Claim-check + stored evidence + **required** receipt |
 | Evidence + receipt (URL) | `npm run production-flow -- --url https://…` | Same integrity/receipt path against any public URL |
+| Collection Q&A (RAG) | `npm run collection-qa` | Index multiple documents, ask across them, cite the source bundle |
 | Optional on-chain | add `--notarize` | Anchors the manifest on-chain (uses plan credits) |
 | Dev-only soft receipt | `--allow-missing-receipt` | Skip receipt failure (not for demos / PH) |
+
+## Agent frameworks
+
+The Python SDK ships a first-class [CrewAI](https://www.crewai.com/) toolkit (`docimprint.crewai`) — see the [Python demos](../python#crewai). There's no framework-specific wrapper for Node/TS yet (LangChain.js, Vercel AI SDK, etc.) — integrate by calling the `DocImprintClient` methods directly as tools, same as any other SDK call in this package.
 
 ## Develop
 
@@ -67,7 +72,7 @@ npm test
 
 ```
 ../fixtures/     # shared MSA + claims
-src/             # hero + URL deep dive + shared helpers
+src/             # hero + URL deep dive + RAG + shared helpers
 out/             # gitignored evidence packs
 ```
 

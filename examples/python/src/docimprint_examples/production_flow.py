@@ -108,7 +108,7 @@ def run(
             console.print("  notarize = done")
 
         receipt_verify, receipt_rows, receipt_warnings = require_valid_receipt(
-            session.receipts,
+            session.client,
             bundle_id=bundle_id,
             preferred_id=summary["inline_receipt_id"],
             allow_missing=allow_missing_receipt,

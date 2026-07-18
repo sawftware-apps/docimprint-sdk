@@ -6,6 +6,15 @@ Part of [`docimprint-sdk`](https://github.com/sawftware-apps/docimprint-sdk). Ch
 
 Receipts are **required** by default (the demo exits non-zero without a valid receipt).
 
+## CrewAI
+
+DocImprint ships a first-class [CrewAI](https://www.crewai.com/) toolkit (`docimprint.crewai`) — grouped tools (`research_tools()`, `legal_tools()`, `collection_tools()`), automatic provenance logging via `toolkit.track_crew(...)`, and explicit multi-agent handoffs. See [Demos](#demos) below for the two-agent legal review crew, or the [main SDK README](../../python/README.md#crewai-quickstart) for the full API.
+
+```bash
+pip install -e ".[crewai]"
+python -m docimprint_examples.crewai_legal_review
+```
+
 ## Quick start
 
 From the SDK repo root:
@@ -55,12 +64,16 @@ Claim check
 |------|---------|---------------|
 | **Prove what the agent read** (start here) | `python -m docimprint_examples.prove_what_agent_read` | Claim-check + stored evidence + **required** receipt |
 | Evidence + receipt (URL) | `python -m docimprint_examples.production_flow --url https://…` | Same integrity/receipt path against any public URL |
+| Collection Q&A (RAG) | `python -m docimprint_examples.collection_qa` | Index multiple documents, ask across them, cite the source bundle |
+| CrewAI legal review | `python -m docimprint_examples.crewai_legal_review` (needs `pip install -e ".[crewai]"`) | Two-agent crew: researcher extracts, reviewer independently verifies + signed receipt audit |
 | Optional on-chain | add `--notarize` | Anchors the manifest on-chain (uses plan credits) |
 | Dev-only soft receipt | `--allow-missing-receipt` | Skip receipt failure (not for demos / PH) |
 
 ```bash
 docimprint-prove
 docimprint-production-flow --url https://example.com/contract.pdf
+docimprint-collection-qa
+docimprint-crewai-legal-review
 ```
 
 ## Artifacts explained
@@ -75,7 +88,7 @@ docimprint-production-flow --url https://example.com/contract.pdf
 ## Develop
 
 ```bash
-pip install -e ".[dev]"
+pip install -e ".[dev,crewai]"
 pytest -q
 ```
 
@@ -83,7 +96,7 @@ pytest -q
 
 ```
 ../fixtures/              # shared MSA + claims (supported + gotcha)
-src/docimprint_examples/  # hero + URL deep dive + shared helpers
+src/docimprint_examples/  # hero + URL deep dive + RAG + CrewAI + shared helpers
 tests/                    # unit tests (respx, no live key required)
 out/                      # gitignored evidence packs from local runs
 ```

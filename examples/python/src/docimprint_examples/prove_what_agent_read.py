@@ -148,7 +148,7 @@ def run(
         # 3) Independent receipt audit (required unless explicitly waived)
         console.print("[bold]3/3[/] Independently verifying the action receipt…")
         receipt_verify, receipt_rows, receipt_warnings = require_valid_receipt(
-            session.receipts,
+            session.client,
             bundle_id=bundle_id,
             preferred_id=inline_rid,
             allow_missing=allow_missing_receipt,

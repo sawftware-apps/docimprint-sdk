@@ -11,6 +11,7 @@ import {
   apiVerifyUrl,
   bundleIdOf,
   createClient,
+  extractUrl,
   loadConfig,
   manifestSha256,
   parseArgs,
@@ -37,9 +38,7 @@ async function main(): Promise<void> {
   console.log('  Extract a URL into a signed bundle, verify integrity,')
   console.log('  then independently audit the action receipt.\n')
 
-  const extracted = (await client.extract({
-    source: url,
-  })) as unknown as Record<string, unknown>
+  const extracted = await extractUrl({ apiKey, baseUrl, url, retries: 3 })
 
   const bundleId = bundleIdOf(extracted)
   if (!bundleId) {

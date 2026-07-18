@@ -7,9 +7,8 @@ import json
 import httpx
 import pytest
 import respx
-from docimprint import DocImprintError
+from docimprint import DocImprintClient, DocImprintError
 
-from docimprint_examples.receipts import ReceiptClient
 from docimprint_examples.shared import (
     assert_claim_gotcha,
     claim_rows,
@@ -122,9 +121,9 @@ def test_require_valid_receipt_success() -> None:
             },
         )
     )
-    with ReceiptClient("test-key", base_url="https://api.docimprint.com") as receipts:
+    with DocImprintClient("test-key", base_url="https://api.docimprint.com") as client:
         verified, rows, warnings = require_valid_receipt(
-            receipts,
+            client,
             bundle_id="ev_abc123",
             preferred_id="rcpt_1",
             allow_missing=False,
@@ -143,10 +142,10 @@ def test_require_valid_receipt_missing_fails() -> None:
             json={"bundle_id": "ev_abc123", "receipts": []},
         )
     )
-    with ReceiptClient("test-key", base_url="https://api.docimprint.com") as receipts:
+    with DocImprintClient("test-key", base_url="https://api.docimprint.com") as client:
         with pytest.raises(DocImprintError) as exc:
             require_valid_receipt(
-                receipts,
+                client,
                 bundle_id="ev_abc123",
                 preferred_id=None,
                 allow_missing=False,

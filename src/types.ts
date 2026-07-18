@@ -284,9 +284,9 @@ export interface ListJobsOptions {
 // ── Collections ───────────────────────────────────────────────────────────────
 
 export interface Collection {
-  id: string
+  collection_id: string
   name: string
-  created_at: string
+  created_at?: string
 }
 
 export interface CreateCollectionRequest {
@@ -329,9 +329,9 @@ export interface AskCollectionRequest {
 }
 
 export interface AskCollectionResponse {
-  answer: string
+  answer: string | CitedField<string>
   answer_cited?: CitedField<string>
-  sources: Array<{ bundle_id: string; chunk_id: string; text: string }>
+  sources: Array<{ bundle_id: string; chunk_id: string; text?: string }>
   model_used?: string
 }
 

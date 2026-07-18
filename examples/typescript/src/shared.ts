@@ -60,6 +60,18 @@ export function bundleIdOf(payload: Record<string, unknown>): string | undefined
   return typeof id === 'string' ? id : undefined
 }
 
+/** Some endpoints return a plain string, others a cited field ({value, confidence, citations}). */
+export function citedText(value: unknown): { text: string; citations: unknown[] } {
+  if (value && typeof value === 'object' && 'value' in value) {
+    const v = value as { value?: unknown; citations?: unknown }
+    return {
+      text: String(v.value ?? ''),
+      citations: Array.isArray(v.citations) ? v.citations : [],
+    }
+  }
+  return { text: String(value ?? ''), citations: [] }
+}
+
 export function receiptIdOf(
   receipt: ActionReceipt | ActionReceiptRecord | Record<string, unknown> | null | undefined,
 ): string | undefined {
@@ -265,6 +277,58 @@ export async function extractUploadedFile(opts: {
   }
 
   throw lastError ?? new DocImprintError('upload failed', 500, 'UPLOAD_FAILED')
+}
+
+/**
+ * Sync URL extract with retry. `client.extract()` has no `sync` option and
+ * defaults to an async queued job with no polling helper in the SDK yet, so
+ * this goes straight to the API the same way extractUploadedFile does.
+ */
+export async function extractUrl(opts: {
+  apiKey: string
+  baseUrl: string
+  url: string
+  mode?: string
+  retries?: number
+}): Promise<Record<string, unknown>> {
+  const { apiKey, baseUrl, url, mode = 'extract', retries = 2 } = opts
+  const endpoint = `${baseUrl.replace(/\/$/, '')}/v1/extract?sync=true&store=true`
+  const attempts = Math.max(1, retries + 1)
+  let lastError: DocImprintError | undefined
+
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mode, source: url }),
+    })
+    const requestId = res.headers.get('x-request-id') ?? undefined
+
+    let payload: Record<string, unknown> = {}
+    try {
+      payload = (await res.json()) as Record<string, unknown>
+    } catch {
+      payload = { message: res.statusText }
+    }
+
+    if (res.ok) return payload
+
+    const message = String(payload.message ?? payload.error ?? `HTTP ${res.status}`)
+    const code = typeof payload.code === 'string' ? payload.code : 'UNKNOWN_ERROR'
+    lastError = new DocImprintError(message, res.status, code, requestId)
+
+    if (
+      attempt + 1 < attempts &&
+      res.status >= 500 &&
+      (code === 'PROCESSING_ERROR' || message.includes('AI response'))
+    ) {
+      await sleep(1500 * (attempt + 1))
+      continue
+    }
+    throw lastError
+  }
+
+  throw lastError ?? new DocImprintError('extract failed', 500, 'EXTRACT_FAILED')
 }
 
 export async function requireValidReceipt(
