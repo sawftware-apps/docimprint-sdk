@@ -1,6 +1,6 @@
 """DocImprint Python SDK."""
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 from docimprint.client import DocImprintClient
 from docimprint.errors import DocImprintError

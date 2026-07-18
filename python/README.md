@@ -35,7 +35,7 @@ Crew(agents=[researcher], tasks=[task]).kickoff()
 from docimprint import DocImprintClient
 
 with DocImprintClient(api_key="...") as client:
-    bundle = client.extract_evidence(url="https://example.com")
+    bundle = client.extract(url="https://example.com")
     print(bundle["bundle_id"])
 ```
 
