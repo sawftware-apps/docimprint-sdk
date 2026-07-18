@@ -111,3 +111,37 @@ class QuotaResponse(DocImprintModel):
     credits_remaining: int | None = None
     credits_used: int | None = None
     plan: str | None = None
+
+
+class ActionReceipt(DocImprintModel):
+    receipt_id: str | None = None
+    bundle_id: str | None = None
+    agent_id: str | None = None
+    action: str | None = None
+    manifest_sha256: str | None = None
+    signed_at: str | None = None
+    signature: str | None = None
+    signer_address: str | None = None
+    key_id: str | None = None
+    algorithm: str | None = None
+
+
+class ListReceiptsResponse(DocImprintModel):
+    bundle_id: str | None = None
+    receipts: list[ActionReceipt] = Field(default_factory=list)
+    limit: int | None = None
+    offset: int | None = None
+
+
+class VerifyReceiptResponse(DocImprintModel):
+    receipt_id: str | None = None
+    valid: bool
+    signature_valid: bool | None = None
+    manifest_matches_current: bool | None = None
+    bundle_id: str | None = None
+    agent_id: str | None = None
+    action: str | None = None
+    manifest_sha256: str | None = None
+    signer_address: str | None = None
+    signed_at: str | None = None
+    tampered: list[str] = Field(default_factory=list)

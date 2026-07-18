@@ -327,3 +327,25 @@ class DocImprintClient:
             json={"from_agent": from_agent, "to_agent": to_agent, "note": note},
         )
         return result or {}
+
+    # --- Action receipts ---
+
+    def list_receipts(self, bundle_id: str, *, limit: int = 50, offset: int = 0) -> dict[str, Any]:
+        bundle_id = validate_bundle_id(bundle_id)
+        result = self._request(
+            "GET",
+            f"/v1/extract/{bundle_id}/receipts",
+            params={"limit": limit, "offset": offset},
+        )
+        return result or {}
+
+    def verify_receipt(self, receipt_id: str) -> dict[str, Any]:
+        """GET /v1/extract/receipts/{receipt_id}/verify
+
+        Receipt IDs are unguessable capability tokens — this endpoint is not
+        owner-gated so a third-party auditor can verify independently.
+        """
+        if not receipt_id or not isinstance(receipt_id, str):
+            raise DocImprintError("receipt_id is required", code="INVALID_RECEIPT_ID")
+        result = self._request("GET", f"/v1/extract/receipts/{receipt_id}/verify")
+        return result or {}
