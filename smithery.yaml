@@ -1,7 +1,7 @@
 # Smithery / MCP registry manifest — https://api.docimprint.com/mcp
 name: docimprint
-description: Verifiable document memory for AI agents. Extract, summarize, claim-check, collections, verify bundles.
-version: 1.0.0
+description: Verifiable document intelligence for AI agents. Extract, summarize, claim-check, notarize, and signed action receipts (list/verify). Store evidence bundles with cited proof.
+version: 1.0.5
 homepage: https://docimprint.com
 repository: https://github.com/sawftware-apps/docimprint-sdk
 license: Proprietary
@@ -31,6 +31,7 @@ tags:
   - x402
   - document-memory
   - evidence-bundle
+  - action-receipts
   - MCP
   - legal-tech
   - compliance

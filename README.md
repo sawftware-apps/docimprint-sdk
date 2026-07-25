@@ -401,12 +401,14 @@ Transport: `streamable-http` · Auth: Bearer token · [Listed on Smithery](https
 
 | Tool | Description |
 |------|---|
-| `verify_bundle` | Cryptographic integrity check |
-| `get_bundle` | Bundle metadata and notarization status |
-| `notarize_bundle` | On-chain EAS attestation on Base L2 |
+| `verify_bundle` | Cryptographic integrity check (returns signed action receipt) |
+| `get_bundle` | Bundle metadata and notarization status (returns receipt) |
+| `notarize_bundle` | On-chain EAS attestation on Base L2 (returns receipt) |
+| `list_receipts` | List signed action receipts for a bundle |
+| `verify_action_receipt` | Verify a receipt signature + manifest binding |
 | `create_collection` | Create a named document collection |
 | `list_collections` | List your collections |
-| `add_document_to_collection` | Add bundle + trigger async indexing |
+| `add_document_to_collection` | Add bundle + trigger async indexing (returns receipt) |
 | `search_collection` | Semantic vector search |
 | `ask_collection` | Cross-document RAG Q&A |
 | `get_job_status` | Poll async job (extract, indexing, batch) |
