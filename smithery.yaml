@@ -14,15 +14,12 @@ mcp:
 configSchema:
   type: object
   properties:
-    apiKey:
+    x-api-key:
       type: string
       title: API Key
-      description: "Your DocImprint API key (dr_live_...)"
-      x-to:
-        header: Authorization
-        format: "Bearer {value}"
-  required:
-    - apiKey
+      description: "Your DocImprint API key (starts with dr_live_). Optional for discovery; required for tool calls."
+      x-from:
+        header: x-api-key
 
 privacy_policy: https://docimprint.com/privacy
 terms_of_service: https://docimprint.com/terms

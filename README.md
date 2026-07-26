@@ -12,7 +12,7 @@
   <a href="https://www.npmjs.com/package/docimprint"><img src="https://img.shields.io/npm/dm/docimprint?color=0ea5e9&labelColor=0a0a0a" alt="npm downloads" /></a>
   <a href="https://pypi.org/project/docimprint/"><img src="https://img.shields.io/pypi/v/docimprint?color=0ea5e9&labelColor=0a0a0a" alt="PyPI version" /></a>
   <a href="https://pypi.org/project/docimprint/"><img src="https://img.shields.io/pypi/dm/docimprint?color=0ea5e9&labelColor=0a0a0a" alt="PyPI downloads" /></a>
-  <a href="https://smithery.ai/servers/@sawftware-apps/docimprint"><img src="https://img.shields.io/badge/Smithery-listed-0ea5e9?labelColor=0a0a0a" alt="Smithery" /></a>
+  <a href="https://smithery.ai/servers/sawftware-apps/docimprint"><img src="https://smithery.ai/badge/sawftware-apps/docimprint" alt="smithery badge" /></a>
   <a href="https://glama.ai/mcp/servers/docimprint"><img src="https://img.shields.io/badge/Glama-listed-0ea5e9?labelColor=0a0a0a" alt="Glama" /></a>
   <a href="https://api.docimprint.com/mcp"><img src="https://img.shields.io/badge/MCP-streamable--http-0ea5e9?labelColor=0a0a0a" alt="MCP" /></a>
   <a href="https://api.docimprint.com/openapi.json"><img src="https://img.shields.io/badge/OpenAPI-spec-0ea5e9?labelColor=0a0a0a" alt="OpenAPI" /></a>
@@ -373,7 +373,9 @@ npx @smithery/cli install docimprint --client claude
 }
 ```
 
-Transport: `streamable-http` · Auth: Bearer token · [Listed on Smithery](https://smithery.ai/servers/@sawftware-apps/docimprint) · [Listed on Glama](https://glama.ai/mcp/servers/docimprint)
+Transport: `streamable-http` · Auth: Bearer token · [Listed on Smithery](https://smithery.ai/servers/sawftware-apps/docimprint) · [Listed on Glama](https://glama.ai/mcp/servers/docimprint)
+
+[![smithery badge](https://smithery.ai/badge/sawftware-apps/docimprint)](https://smithery.ai/servers/sawftware-apps/docimprint)
 
 ### MCP tools
 
